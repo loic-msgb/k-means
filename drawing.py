@@ -7,8 +7,8 @@
 # - https://pyqtgraph.readthedocs.io/en/pyqtgraph-0.13.0/index.html
 
 # Running examples:
-import pyqtgraph.examples
-pyqtgraph.examples.run()
+# import pyqtgraph.examples
+# pyqtgraph.examples.run()
 
 import random
 import numpy as np
@@ -16,7 +16,7 @@ import pyqtgraph as pg
 from pyqtgraph.Qt import QtWidgets # 2D
 import pyqtgraph.opengl as gl # 3D
 
-# Samples content: (x, y) or (x, y, centroid_x, centroid_y) or (x, y, z) or
+# Samples content: (x, y) or (x, y, centroid_x, centroid_y)(x, y, centroid_x, centroid_y) or (x, y, z) or
 # (x, y, z, centroid_x, centroid_y, centroid_z). Offset: for translating the 3D data.
 def draw(samples, windowSize=1000, offset=(0, 0, 0)):
 	random.seed(42)

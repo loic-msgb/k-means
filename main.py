@@ -12,10 +12,12 @@ def readData(filename):
                 continue
             data.append([float(x) for x in line.split(',')])
     return data
+data = np.genfromtxt('data/mock_2d_data.csv', delimiter=',')
+data = np.nan_to_num(data, nan=0, posinf=1e9, neginf=-1e9)
+print(data.shape)
 
-data = readData('data/mock_2d_data.csv')
+
 #initialiser des centroides aléatoires
-
 k = 4  # nombre de clusters à identifier
 
 centroids = data[np.random.choice(range(len(data)), size=k, replace=False), :]
@@ -32,6 +34,8 @@ while not np.array_equal(old_centroids, centroids):
     old_centroids = np.copy(centroids)
     for i in range(k):
         centroids[i] = np.mean(data[clusters == i], axis=0)
-    
 
-draw(data, windowSize=1000, offset=(0, 0, 0))
+# Concaténer les données avec les coordonnées des centroids
+result = np.hstack((data, centroids[clusters]))
+
+draw(result, windowSize=1000, offset=(0, 0, 0))
