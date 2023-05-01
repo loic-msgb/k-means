@@ -2,8 +2,6 @@ from drawing import draw
 import numpy as np
 import random
 import csv
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
 # Define the k-means function
 def k_means(data, k):
@@ -72,38 +70,6 @@ def save_data(filename, formatted_data):
         for row in formatted_data:
             writer.writerow(row)
 
-#Draw the data
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
-import numpy as np
-
-def draw_3D(points_list):
-    # Extracting the clusters' centroids
-    centroids = [(p[3], p[4], p[5]) for p in points_list]
-    unique_centroids = list(set(centroids))
-    num_clusters = len(unique_centroids)
-
-    # Assigning a color to each cluster
-    colors = plt.cm.rainbow(np.linspace(0, 1, num_clusters))
-
-    # Creating a figure and an axes object
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-
-    # Plotting each point with its corresponding color
-    for i in range(num_clusters):
-        points_in_cluster = [p for p in points_list if (p[3], p[4], p[5]) == unique_centroids[i]]
-        ax.scatter([p[0] for p in points_in_cluster], [p[1] for p in points_in_cluster], [p[2] for p in points_in_cluster], color=colors[i])
-
-    # Labeling the axes
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-
-    # Showing the plot
-    plt.show()
-
-
 # Define the file path
 filename = 'data/3d_data.csv'
 
@@ -111,41 +77,22 @@ filename = 'data/3d_data.csv'
 data = load_data(filename)
 
 # Choose the number of clusters
+k = 10
 
-k_values = range(7, 11)
-
-average_distances = []
-best_clusters, best_centroids, best_average_distance = None, None, float('inf')
-
-for k in k_values:
-    # Run k-means 5 times and keep the centroids with the smallest average distance
-    for i in range(3):
-        clusters, centroids, average_distance = k_means(data, k)
-        if average_distance < best_average_distance:
-            best_clusters, best_centroids, best_average_distance = clusters, centroids, average_distance
-    
-    average_distances.append(best_average_distance)
+# Run k-means
+clusters, centroids, average_distance = k_means(data, k)
 
 # Print the results
-print(f'Data shape: {np.array(data).shape}')
 print(f'Number of points: {len(data)}')
-print(f'Average distance: {best_average_distance}')
-
+print(f'Number of clusters: {k}')
+print(f'Average distance: {average_distance}')
 
 # Format the data for drawing
-formatted_data = format_data(best_clusters, best_centroids)
-
+formatted_data = format_data(clusters, centroids)
+print(formatted_data[0])
+print(len(formatted_data[0]))
 # Save the data
 save_data('output.csv', formatted_data)
-
-draw_3D(formatted_data)
-
-# Plot the average distance for each value of k
-plt.plot(k_values, average_distances)
-plt.xlabel('Number of clusters')
-plt.ylabel('Average distance')
-plt.title('Average distance vs. number of clusters')
-plt.show()
 
 # Draw the data
 #draw(formatted_data, windowSize= 1000, offset=(0,0,0))
